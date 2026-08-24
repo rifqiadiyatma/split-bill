@@ -5,185 +5,224 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Split Bill</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
-    --cream:#EAF6FF;
-    --cream-deep:#D2ECFB;
-    --orange:#2E9CE0;
-    --orange-dark:#1C7DB5;
-    --yellow:#8FD9FF;
-    --coral:#FF5B77;
-    --teal:#3FA796;
-    --brown:#1F3A4D;
-    --brown-soft:#5C7C90;
-    --white:#FFFFFF;
-    --line:#CFE8F7;
-    --shadow:0 8px 24px rgba(31,58,77,0.10);
+    --ink:#111111;
+    --bg:#F4F1E8;
+    --paper:#FFFFFF;
+    --coral:#FF5A3C;
+    --blue:#FF5A3C;
+    --yellow:#FFD400;
+    --green:#16A34A;
+    --red:#E63946;
+    --bw:3px;
+    --shadow:6px 6px 0 var(--ink);
+    --shadow-sm:4px 4px 0 var(--ink);
   }
   *{box-sizing:border-box;}
   body{
-    margin:0;background:var(--cream);
-    background-image:
-      radial-gradient(circle at 8% 8%, var(--cream-deep) 0%, transparent 45%),
-      radial-gradient(circle at 95% 90%, var(--cream-deep) 0%, transparent 40%);
-    font-family:'Plus Jakarta Sans', sans-serif;
-    color:var(--brown);min-height:100vh;padding:28px 18px 60px;
+    margin:0;background:var(--bg);
+    font-family:'JetBrains Mono', monospace;
+    color:var(--ink);min-height:100vh;padding:28px 18px 60px;
   }
-  h1,h2,h3,.brand{font-family:'Baloo 2', sans-serif;}
+  h1,h2,h3,.brand{font-family:'Space Grotesk', sans-serif;}
   .wrap{max-width:920px;margin:0 auto;}
- 
+
   .topbar{
-    background:var(--white);border-radius:22px;box-shadow:var(--shadow);
+    background:var(--yellow);border:var(--bw) solid var(--ink);box-shadow:var(--shadow);
     padding:18px 24px;display:flex;align-items:center;justify-content:space-between;
-    gap:16px;flex-wrap:wrap;margin-bottom:18px;
+    gap:16px;flex-wrap:wrap;margin-bottom:22px;
   }
-  .brand{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;}
-  .mascot{width:44px;height:44px;flex-shrink:0;}
-  .brand span.sub{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:500;color:var(--brown-soft);}
+  .brand{display:flex;align-items:center;gap:14px;font-size:24px;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;}
+  .mascot{width:52px;height:52px;flex-shrink:0;transform:rotate(-4deg);}
+  .brand span.sub{display:block;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0;margin-top:2px;}
   .header-actions{display:flex;gap:10px;flex-wrap:wrap;}
- 
+
   .btn{
-    border:none;border-radius:999px;padding:10px 18px;font-family:inherit;
+    border:var(--bw) solid var(--ink);border-radius:0;padding:10px 18px;font-family:'Space Grotesk',sans-serif;
     font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
-    transition:transform .15s ease, background .15s ease;
+    text-transform:uppercase;letter-spacing:.02em;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s ease, box-shadow .1s ease;
+    background:var(--paper);color:var(--ink);
   }
-  .btn:active{transform:scale(0.96);}
-  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 6px 14px rgba(46,156,224,0.35);}
-  .btn-primary:hover{background:var(--orange-dark);}
-  .btn-ghost{background:var(--cream-deep);color:var(--brown);}
-  .btn-ghost:hover{background:#C7E8FA;}
-  .btn-outline{background:transparent;border:2px solid var(--line);color:var(--brown-soft);}
-  .btn-outline:hover{border-color:var(--orange);color:var(--orange);}
-  .btn-danger-outline{background:transparent;border:2px solid var(--coral);color:var(--coral);padding:6px 12px;font-size:12.5px;}
-  .btn-danger-outline:hover{background:var(--coral);color:#fff;}
-  .btn-sm{padding:6px 12px;font-size:12.5px;border-radius:10px;}
- 
+  .btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink);}
+  .btn-primary{background:var(--coral);color:white;}
+  .btn-primary:hover{background:#E8461F;}
+  .btn-ghost{background:var(--blue);color:#fff;}
+  .btn-ghost:hover{background:#1A56E0;}
+  .btn-outline{background:var(--paper);color:var(--ink);}
+  .btn-outline:hover{background:#EFEFEF;}
+  .btn-danger-outline{background:var(--paper);border:2px solid var(--ink);color:var(--red);padding:6px 12px;font-size:12.5px;box-shadow:3px 3px 0 var(--ink);}
+  .btn-danger-outline:hover{background:var(--red);color:#fff;}
+  .btn-sm{padding:6px 12px;font-size:12.5px;box-shadow:3px 3px 0 var(--ink);}
+
   /* tabs */
-  .tabs{display:flex;gap:10px;margin-bottom:18px;}
+  .tabs{display:flex;gap:12px;margin-bottom:22px;}
   .tab{
-    padding:10px 20px;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer;
-    background:var(--white);color:var(--brown-soft);box-shadow:var(--shadow);
+    padding:10px 20px;border:var(--bw) solid var(--ink);font-weight:700;font-size:14px;cursor:pointer;
+    background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm);
+    text-transform:uppercase;font-family:'Space Grotesk',sans-serif;
+    transition:transform .1s ease, box-shadow .1s ease;
   }
-  .tab.active{background:var(--orange);color:#fff;}
- 
-  .card{background:var(--white);border-radius:22px;box-shadow:var(--shadow);padding:24px;margin-bottom:18px;}
-  .card h2{margin:0 0 4px;font-size:19px;}
-  .card .hint{color:var(--brown-soft);font-size:12.5px;margin-bottom:18px;}
- 
-  .field label{display:block;font-size:12.5px;font-weight:700;color:var(--brown-soft);margin-bottom:6px;}
+  .tab:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink);}
+  .tab.active{background:var(--blue);color:#fff;}
+
+  .card{background:var(--paper);border:var(--bw) solid var(--ink);box-shadow:var(--shadow);padding:24px;margin-bottom:22px;}
+  .card h2{margin:0 0 4px;font-size:20px;text-transform:uppercase;letter-spacing:-.01em;}
+  .card .hint{color:var(--ink);opacity:.65;font-size:12.5px;margin-bottom:18px;}
+
+  .field label{display:block;font-size:11.5px;font-weight:700;color:var(--ink);margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em;}
   .field input, .field textarea{
-    width:100%;padding:10px 12px;border-radius:12px;border:2px solid var(--line);
-    font-family:inherit;font-size:14px;background:var(--cream);color:var(--brown);
+    width:100%;padding:10px 12px;border:2px solid var(--ink);border-radius:0;
+    font-family:'JetBrains Mono',monospace;font-size:14px;background:var(--bg);color:var(--ink);
   }
-  .field input:focus{outline:none;border-color:var(--orange);}
+  .field input:focus{outline:none;border-color:var(--ink);box-shadow:3px 3px 0 var(--coral);}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
- 
+
   table{width:100%;border-collapse:collapse;margin-top:6px;}
   thead th{
-    text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;
-    color:var(--brown-soft);padding:8px 8px;border-bottom:2px solid var(--line);
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;
+    color:var(--ink);padding:8px 8px;border-bottom:var(--bw) solid var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:700;
   }
-  tbody td{padding:8px 8px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle;}
+  tbody td{padding:8px 8px;border-bottom:2px solid var(--ink);font-size:14px;vertical-align:middle;}
   tbody tr:last-child td{border-bottom:none;}
   .item-input{
-    width:100%;padding:7px 9px;border-radius:9px;border:2px solid var(--line);
-    background:var(--cream);font-family:inherit;font-size:13.5px;color:var(--brown);
+    width:100%;padding:7px 9px;border:2px solid var(--ink);border-radius:0;
+    background:var(--bg);font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--ink);
   }
-  .item-input:focus{outline:none;border-color:var(--orange);}
-  .col-qty{width:70px;} .col-harga{width:130px;} .col-sub{width:120px;text-align:right;color:var(--brown-soft);font-weight:600;} .col-del{width:36px;text-align:center;}
-  .del-btn{background:none;border:none;color:var(--coral);font-size:16px;cursor:pointer;}
-  .del-btn:hover{color:#E8425F;}
- 
+  .item-input:focus{outline:none;border-color:var(--ink);box-shadow:2px 2px 0 var(--blue);}
+  .col-qty{width:70px;} .col-harga{width:130px;} .col-sub{width:120px;text-align:right;color:var(--ink);font-weight:700;} .col-del{width:36px;text-align:center;}
+  .del-btn{background:var(--red);border:2px solid var(--ink);color:#fff;font-size:14px;cursor:pointer;width:26px;height:26px;line-height:1;font-weight:800;}
+  .del-btn:hover{background:#E8283E;}
+
   .add-row-btn{
-    margin-top:10px;background:var(--cream-deep);border:2px dashed #9CCFEE;color:var(--orange-dark);
-    border-radius:12px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;width:100%;
+    margin-top:10px;background:var(--red);border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);color:white;
+    padding:10px 14px;font-weight:800;font-size:13px;cursor:pointer;width:100%;text-transform:uppercase;
+    font-family:'Space Grotesk',sans-serif;letter-spacing:.02em;
   }
-  .add-row-btn:hover{background:#C7E8FA;}
- 
+  .add-row-btn:hover{background:#E8461F;}
+
   .summary-line{
     display:flex;justify-content:space-between;align-items:center;
-    padding:10px 0;font-size:14.5px;
+    padding:10px 0;font-size:14.5px;font-weight:600;
   }
-  .summary-line.total{font-weight:800;font-size:17px;border-top:2px solid var(--line);margin-top:6px;padding-top:14px;}
-  .discount-input-wrap{margin-top:16px;padding:16px;background:var(--cream-deep);border-radius:16px;}
-  .discount-input-wrap label{color:var(--orange-dark);}
- 
+  .summary-line.total{font-weight:800;font-size:18px;border-top:var(--bw) solid var(--ink);margin-top:6px;padding-top:14px;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;}
+  .discount-input-wrap{margin-top:18px;padding:16px;background:var(--yellow);border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);}
+  .discount-input-wrap label{color:var(--ink);}
+
   .badge{
-    display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;
-    font-size:12.5px;font-weight:700;background:var(--teal);color:#fff;
+    display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+    font-size:12px;font-weight:800;background:var(--green);color:var(--ink);
+    border:2px solid var(--ink);text-transform:uppercase;font-family:'Space Grotesk',sans-serif;
+    transform:rotate(-2deg);letter-spacing:.02em;
   }
-  .badge.up{background:var(--coral);}
- 
-  .result-panel{margin-top:18px;padding:18px;border-radius:16px;background:#FBF6EF;border:2px solid var(--line);}
-  .result-panel h3{margin:0 0 10px;font-size:16px;}
- 
+  .badge.up{background:var(--red);color:#fff;}
+
+  .result-panel{margin-top:22px;padding:20px;background:var(--paper);border:var(--bw) solid var(--ink);box-shadow:var(--shadow);position:relative;}
+  .result-panel::before{
+    content:"LUNAS";position:absolute;top:14px;right:18px;font-family:'Space Grotesk',sans-serif;
+    font-weight:800;font-size:13px;color:var(--red);border:2.5px solid var(--red);padding:3px 10px;
+    transform:rotate(8deg);letter-spacing:.08em;
+  }
+  .result-panel h3{margin:0 0 14px;font-size:17px;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;}
+
   /* Dashboard */
-  .day-card{background:var(--white);border-radius:18px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;}
+  .day-card{background:var(--paper);border:var(--bw) solid var(--ink);box-shadow:var(--shadow-sm);margin-bottom:16px;overflow:hidden;}
   .day-head{
-    padding:16px 20px;display:flex;justify-content:space-between;align-items:center;
-    cursor:pointer;flex-wrap:wrap;gap:8px;
+    padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:black 4px solid;
+    cursor:pointer;flex-wrap:wrap;gap:8px;background:#fff;
   }
-  .day-head:hover{background:#F3FAFF;}
-  .day-title{font-weight:700;font-size:15.5px;}
-  .day-sub{font-size:12px;color:var(--brown-soft);}
-  .day-total{font-weight:800;color:var(--orange-dark);font-size:16px;}
+  .day-head:hover{background:var(--bg);}
+  .day-title{font-weight:800;font-size:15.5px;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;}
+  .day-sub{font-size:12px;opacity:.85;}
+  .day-total{font-weight:800;color:var(--ink);font-size:16px;background:var(--yellow);border:2px solid var(--ink);padding:3px 10px;}
   .day-body{display:none;padding:0 20px 18px;}
   .day-body.open{display:block;}
-  .bill-block{padding:14px 0;border-top:1px dashed var(--line);}
+  .bill-block{padding:14px 0;border-top:2px dashed var(--ink);}
   .bill-block:first-child{border-top:none;}
-  .bill-block-head{display:flex;justify-content:space-between;font-size:13px;color:var(--brown-soft);margin-bottom:6px;flex-wrap:wrap;gap:6px;}
+  .bill-block-head{display:flex;justify-content:space-between;font-size:13px;color:var(--ink);margin-bottom:8px;flex-wrap:wrap;gap:6px;font-weight:600;align-items:center;}
   .mini-table{width:100%;font-size:12.5px;}
-  .mini-table th{color:var(--brown-soft);font-weight:600;text-align:left;padding:4px 6px;}
-  .mini-table td{padding:4px 6px;border-bottom:1px solid var(--line);}
+  .mini-table th{color:var(--ink);font-weight:700;text-align:left;padding:4px 6px;text-transform:uppercase;font-size:10.5px;}
+  .mini-table td{padding:4px 6px;border-bottom:1.5px solid var(--ink);}
   .mini-table td.num{text-align:right;}
- 
-  .empty-state{text-align:center;padding:50px 20px;color:var(--brown-soft);}
+
+  .empty-state{text-align:center;padding:50px 20px;color:var(--ink);background:var(--paper);border:var(--bw) solid var(--ink);box-shadow:var(--shadow);}
   .empty-state svg{width:70px;height:70px;margin-bottom:12px;}
- 
-  .overview-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
-  .stat-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px;}
-  .stat-card .num{font-size:22px;font-weight:800;color:var(--orange-dark);}
-  .stat-card .lbl{font-size:12px;color:var(--brown-soft);font-weight:600;margin-top:2px;}
- 
+
+  .overview-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+  .stat-card{background:var(--paper);border:var(--bw) solid var(--ink);box-shadow:var(--shadow-sm);padding:16px 18px;}
+  .stat-card:nth-child(1){background:var(--red);}
+  .stat-card:nth-child(1) .num,.stat-card:nth-child(1) .lbl{color:#fff;}
+  .stat-card:nth-child(2){background:var(--yellow);}
+  .stat-card:nth-child(3){background:var(--blue);}
+  .stat-card:nth-child(3) .num,.stat-card:nth-child(3) .lbl{color:#fff;}
+  .stat-card .num{font-size:24px;font-weight:800;color:var(--ink);font-family:'Space Grotesk',sans-serif;}
+  .stat-card .lbl{font-size:11.5px;color:var(--ink);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:.02em;}
+
   .toast{
     position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--brown);color:#fff;padding:12px 20px;border-radius:999px;
-    font-size:13.5px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.25);
-    opacity:0;transition:all .25s ease;z-index:60;pointer-events:none;
+    background:var(--ink);color:#fff;padding:12px 20px;border:2px solid var(--ink);
+    font-size:13.5px;font-weight:700;box-shadow:5px 5px 0 var(--coral);
+    opacity:0;transition:all .25s ease;z-index:60;pointer-events:none;font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase;letter-spacing:.02em;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
- 
-  footer{text-align:center;font-size:12.5px;color:var(--brown-soft);margin-top:10px;}
- 
+
+  footer{text-align:center;font-size:12px;color:var(--ink);opacity:.7;margin-top:14px;}
+
   @media (max-width:640px){
+    body{padding:16px 12px 50px;}
+    .topbar{padding:14px 16px;}
+    .brand{font-size:17px;gap:10px;}
+    .mascot{width:38px;height:38px;}
+    .brand span.sub{font-size:10.5px;}
+    .header-actions{width:100%;}
+    .header-actions .btn{width:100%;justify-content:center;font-size:12.5px;padding:10px 12px;}
+    .card{padding:16px;}
+    .card h2{font-size:17px;}
+    #connectCard div[style*="flex"]{flex-direction:column;align-items:stretch !important;}
+    #scriptUrlInput{min-width:100% !important;width:100% !important;}
+    #btnConnect{width:100%;justify-content:center;}
+    .tabs{gap:8px;}
+    .tab{flex:1;text-align:center;padding:10px 8px;font-size:12.5px;}
     .row2{grid-template-columns:1fr;}
     .overview-strip{grid-template-columns:1fr;}
-    .col-harga{width:90px;} .col-sub{width:80px;font-size:12px;}
+
     table, thead, tbody, th, td, tr{display:block;}
     thead{display:none;}
-    tbody tr{border-bottom:2px solid var(--line);padding-bottom:8px;margin-bottom:8px;display:block;}
-    tbody td{border-bottom:none;display:flex;justify-content:space-between;align-items:center;padding:4px 0;}
-    tbody td.col-del{justify-content:flex-end;}
+    tbody tr{border:2px solid var(--ink);background:var(--bg);padding:10px 12px;margin-bottom:10px;box-shadow:3px 3px 0 var(--ink);}
+    tbody td{border-bottom:none;display:flex;justify-content:space-between;align-items:center;padding:5px 0;gap:10px;width:auto !important;}
+    tbody td:nth-child(1){display:block;padding-bottom:8px;}
+    tbody td:nth-child(1) .item-input{font-weight:700;}
+    tbody td:nth-child(2)::before{content:"Qty";font-weight:800;text-transform:uppercase;font-size:10.5px;color:var(--ink);opacity:.6;flex:0 0 auto;}
+    tbody td:nth-child(3)::before{content:"Harga satuan";font-weight:800;text-transform:uppercase;font-size:10.5px;color:var(--ink);opacity:.6;flex:0 0 auto;}
+    tbody td:nth-child(4)::before{content:"Subtotal";font-weight:800;text-transform:uppercase;font-size:10.5px;color:var(--ink);opacity:.6;flex:0 0 auto;}
+    tbody td:nth-child(2) .item-input, tbody td:nth-child(3) .item-input{flex:1;min-width:0;max-width:140px;}
+    tbody td.col-del{justify-content:flex-end;padding-top:4px;}
     .col-sub{text-align:right;}
+
+    .result-panel::before{top:10px;right:12px;font-size:11px;padding:2px 8px;}
+    .bill-block-head span:last-child{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center;}
+    .day-total{font-size:14px;}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
- 
+
   <div class="topbar">
     <div class="brand">
       <svg class="mascot" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="52" r="42" fill="#2E9CE0"/>
-        <circle cx="36" cy="48" r="6" fill="#1F3A4D"/>
-        <circle cx="64" cy="48" r="6" fill="#1F3A4D"/>
-        <circle cx="38" cy="46" r="1.6" fill="#fff"/>
-        <circle cx="66" cy="46" r="1.6" fill="#fff"/>
-        <path d="M32 64 Q50 78 68 64" stroke="#1F3A4D" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <circle cx="24" cy="60" r="5" fill="#8FD9FF" opacity="0.9"/>
-        <circle cx="76" cy="60" r="5" fill="#8FD9FF" opacity="0.9"/>
+        <rect x="10" y="14" width="60" height="60" fill="#FFD100" stroke="#111111" stroke-width="4" transform="rotate(-8 40 44)"/>
+        <path d="M28 8 h40 v66 l-6 -6 -6 6 -6 -6 -6 6 -6 -6 -6 6 -6 -6 -6 6 z" fill="#FFFFFF" stroke="#111111" stroke-width="4" stroke-linejoin="round"/>
+        <line x1="34" y1="24" x2="60" y2="24" stroke="#111111" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="34" y1="33" x2="60" y2="33" stroke="#111111" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="34" y1="42" x2="50" y2="42" stroke="#111111" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="72" cy="58" r="20" fill="#FF5A3C" stroke="#111111" stroke-width="4"/>
+        <text x="72" y="65" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="20" fill="#111111" text-anchor="middle">%</text>
       </svg>
       <div>
         Split Bill
@@ -194,22 +233,22 @@
       <button class="btn btn-outline" id="btnExport">⬇ Backup ke Excel</button>
     </div>
   </div>
- 
-  <div class="card" id="connectCard">
+
+  <div class="card" style="display: none;" id="connectCard">
     <h2>🔗 Google Spreadsheet</h2>
     <div class="hint">Tempel URL Web App Apps Script kamu di sini agar semua struk tersimpan langsung ke Google Sheet.</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <input type="text" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/xxxx/exec" style="flex:1;min-width:220px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);font-family:inherit;font-size:13.5px;background:var(--cream);color:var(--brown);">
-      <button class="btn btn-primary" id="btnConnect">Hubungkan & Muat</button>
+      <input type="text" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/xxxx/exec" style="flex:1;min-width:220px;padding:10px 12px;border:2px solid var(--ink);border-radius:0;font-family:'JetBrains Mono',monospace;font-size:13.5px;background:var(--bg);color:var(--ink);">
+      <button class="btn btn-primary" id="btnConnect">Hubungkan &amp; Muat</button>
     </div>
-    <div id="connectStatus" style="margin-top:10px;font-size:12.5px;color:var(--brown-soft);">Status: belum terhubung — data sementara hanya di memori browser.</div>
+    <div id="connectStatus" style="margin-top:10px;font-size:12.5px;color:var(--ink);opacity:.75;">Status: belum terhubung — data sementara hanya di memori browser.</div>
   </div>
- 
+
   <div class="tabs">
     <div class="tab active" data-tab="add">➕ Tambah Struk</div>
     <div class="tab" data-tab="dash">📊 Dashboard</div>
   </div>
- 
+
   <!-- TAMBAH STRUK -->
   <div id="tab-add">
     <div class="card">
@@ -225,7 +264,7 @@
           <input type="text" id="fNote" placeholder="Misalnya: Warung Bu Siti">
         </div>
       </div>
- 
+
       <table>
         <thead>
           <tr>
@@ -239,7 +278,7 @@
         <tbody id="itemBody"></tbody>
       </table>
       <button class="add-row-btn" id="btnAddRow">+ Tambah Menu</button>
- 
+
       <div class="discount-input-wrap">
         <div class="summary-line">
           <span>Total sebelum diskon</span>
@@ -250,15 +289,15 @@
           <input type="number" id="fTotalSetelah" placeholder="Masukkan total di struk setelah diskon" min="0">
         </div>
       </div>
- 
+
       <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-        <button class="btn btn-primary" id="btnHitung">Hitung Diskon & Simpan</button>
+        <button class="btn btn-primary" id="btnHitung">Hitung Diskon &amp; Simpan</button>
       </div>
- 
+
       <div class="result-panel" id="resultPanel" style="display:none;"></div>
     </div>
   </div>
- 
+
   <!-- DASHBOARD -->
   <div id="tab-dash" style="display:none;">
     <div class="overview-strip">
@@ -268,28 +307,28 @@
     </div>
     <div id="dashList"></div>
   </div>
- 
+
   <footer>Database utama disimpan di Google Spreadsheet kamu sendiri lewat Apps Script Web App. Tombol "Backup ke Excel" hanya untuk cadangan lokal opsional.</footer>
 </div>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <script>
   const $ = (id)=>document.getElementById(id);
   const DAYNAMES = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   const MONTHS = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
- 
+
   // ⚙️ EDIT INI: tempel URL Web App Apps Script kamu di sini agar otomatis terhubung tiap file dibuka.
   // Kalau dikosongkan, kamu bisa paste URL-nya di kolom input tiap kali buka aplikasi ini.
   let SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNHKUYazwHi2lOB3wD-HrVTd_dTtEJNWhw8Ejo6nCu5p8wqcUHrJ6zhY747uPIbyoM6Q/exec';
- 
+
   let bills = []; // {id, date, note, items:[{name,qty,harga,subtotal,hargaDiskon,subtotalDiskon}], totalSebelum, totalSetelah, ratio}
   let rowCounter = 0;
- 
+
   function makeBillId(){
     return Date.now() + '-' + Math.random().toString(36).slice(2,7);
   }
- 
+
   function formatRp(n){
     n = Math.round(n||0);
     return 'Rp' + n.toLocaleString('id-ID');
@@ -298,7 +337,7 @@
     const t = $('toast'); t.textContent = msg; t.classList.add('show');
     setTimeout(()=>t.classList.remove('show'), 2200);
   }
- 
+
   // ---------- TAB SWITCHING ----------
   document.querySelectorAll('.tab').forEach(tab=>{
     tab.addEventListener('click', ()=>{
@@ -309,7 +348,7 @@
       if(tab.dataset.tab==='dash') renderDashboard();
     });
   });
- 
+
   // ---------- ITEM ROWS ----------
   function addRow(prefill){
     rowCounter++;
@@ -328,7 +367,7 @@
     $('itemBody').appendChild(tr);
     updateTotals();
   }
- 
+
   function updateTotals(){
     let total = 0;
     $('itemBody').querySelectorAll('tr').forEach(tr=>{
@@ -341,16 +380,16 @@
     $('totalSebelum').textContent = formatRp(total);
     return total;
   }
- 
+
   $('btnAddRow').addEventListener('click', ()=>addRow());
- 
+
   // ---------- HITUNG & SIMPAN ----------
   $('btnHitung').addEventListener('click', ()=>{
     const date = $('fDate').value;
     if(!date){ showToast('Isi tanggal struk dulu ya'); return; }
     const rows = Array.from($('itemBody').querySelectorAll('tr'));
     if(rows.length===0){ showToast('Tambahkan minimal satu menu'); return; }
- 
+
     const items = [];
     let totalSebelum = 0;
     let valid = true;
@@ -364,17 +403,17 @@
       items.push({name, qty, harga, subtotal});
     });
     if(!valid || items.length===0){ showToast('Lengkapi nama menu, qty, dan harga tiap baris'); return; }
- 
+
     const totalSetelah = parseFloat($('fTotalSetelah').value);
     if(isNaN(totalSetelah) || totalSetelah < 0){ showToast('Isi total bayar setelah diskon'); return; }
     if(totalSebelum <= 0){ showToast('Total sebelum diskon tidak boleh nol'); return; }
- 
+
     const ratio = totalSetelah / totalSebelum;
     items.forEach(it=>{
       it.hargaDiskon = it.harga * ratio;
       it.subtotalDiskon = it.subtotal * ratio;
     });
- 
+
     const bill = {
       id: makeBillId(),
       date,
@@ -388,14 +427,14 @@
     renderResult(bill);
     showToast('Struk disimpan. Menyimpan ke Google Sheet...');
     saveBillToSheet(bill);
- 
+
     // reset form for next entry, keep date
     $('itemBody').innerHTML = '';
     $('fNote').value = '';
     $('fTotalSetelah').value = '';
     addRow();
   });
- 
+
   function renderResult(bill){
     const panel = $('resultPanel');
     const diskonPersen = (1 - bill.ratio) * 100;
@@ -403,16 +442,16 @@
     const diskonLabel = diskonPersen >= 0
       ? `Diskon ${diskonPersen.toFixed(1)}%`
       : `Tambahan ${Math.abs(diskonPersen).toFixed(1)}%`;
- 
+
     let rowsHtml = bill.items.map(it=>`
       <tr>
         <td>${it.name}</td>
         <td class="num" style="text-align:right;">${it.qty}</td>
         <td class="num" style="text-align:right;">${formatRp(it.harga)}</td>
-        <td class="num" style="text-align:right;font-weight:700;color:var(--orange-dark);">${formatRp(it.hargaDiskon)}</td>
+        <td class="num" style="text-align:right;font-weight:700;color:var(--ink);">${formatRp(it.hargaDiskon)}</td>
         <td class="num" style="text-align:right;">${formatRp(it.subtotalDiskon)}</td>
       </tr>`).join('');
- 
+
     panel.innerHTML = `
       <h3>Hasil Perhitungan <span class="badge ${badgeClass}">${diskonLabel}</span></h3>
       <table>
@@ -429,7 +468,7 @@
     panel.querySelector('.copy-btn').addEventListener('click', ()=>copyStruk(bill));
     panel.querySelector('.wa-btn').addEventListener('click', ()=>sendToWhatsApp(bill));
   }
- 
+
   function buildStrukText(bill){
     const d = new Date(bill.date+'T00:00:00');
     const dayLabel = isNaN(d) ? bill.date : `${DAYNAMES[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
@@ -437,7 +476,7 @@
     const diskonLine = diskonPersen >= 0
       ? `Diskon: ${diskonPersen.toFixed(1)}%`
       : `Tambahan biaya: ${Math.abs(diskonPersen).toFixed(1)}%`;
- 
+
     let lines = [];
     lines.push(`*${bill.note ? bill.note : 'Split Bill'}*`);
     lines.push(`${dayLabel}`);
@@ -447,7 +486,7 @@
     });
     return lines.join('\n');
   }
- 
+
   function copyStruk(bill){
     const text = buildStrukText(bill);
     if(navigator.clipboard && navigator.clipboard.writeText){
@@ -456,7 +495,7 @@
       fallbackCopy(text);
     }
   }
- 
+
   function fallbackCopy(text){
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -468,24 +507,25 @@
     catch(e){ showToast('Gagal menyalin, coba lagi'); }
     document.body.removeChild(ta);
   }
- 
+
   function sendToWhatsApp(bill){
     const text = buildStrukText(bill);
     window.open(`https://wa.me/6282279235227?text=${encodeURIComponent(text)}`, '_blank');
   }
- 
+
   // ---------- DASHBOARD ----------
   function renderDashboard(){
     const dashList = $('dashList');
     dashList.innerHTML = '';
- 
+
     if(bills.length===0){
       dashList.innerHTML = `<div class="empty-state">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="52" r="40" fill="#D2ECFB"/>
-          <circle cx="38" cy="48" r="5" fill="#D8C6AE"/>
-          <circle cx="62" cy="48" r="5" fill="#D8C6AE"/>
-          <path d="M36 64 Q50 58 64 64" stroke="#D8C6AE" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M32 12 h36 v58 l-5.5 -5.5 -5.5 5.5 -5.5 -5.5 -5.5 5.5 -5.5 -5.5 -5.5 5.5 -2.5 -2.5 z" fill="#FFFFFF" stroke="#111111" stroke-width="4" stroke-linejoin="round" transform="rotate(-4 50 45)"/>
+          <line x1="38" y1="28" x2="60" y2="28" stroke="#111111" stroke-width="3" stroke-linecap="round" transform="rotate(-4 50 45)"/>
+          <line x1="38" y1="36" x2="60" y2="36" stroke="#111111" stroke-width="3" stroke-linecap="round" transform="rotate(-4 50 45)"/>
+          <circle cx="68" cy="66" r="17" fill="#FF5A3C" stroke="#111111" stroke-width="4"/>
+          <line x1="61" y1="66" x2="75" y2="66" stroke="#111111" stroke-width="4" stroke-linecap="round"/>
         </svg>
         <div>Belum ada struk yang tersimpan. Yuk tambahkan struk pertamamu!</div>
       </div>`;
@@ -494,25 +534,25 @@
       $('statDays').textContent = '0';
       return;
     }
- 
+
     const grouped = {};
     bills.forEach(b=>{
       (grouped[b.date] = grouped[b.date] || []).push(b);
     });
     const dates = Object.keys(grouped).sort((a,b)=>b.localeCompare(a));
- 
+
     let grandTotal = 0;
     bills.forEach(b=>grandTotal += b.totalSetelah);
     $('statTotal').textContent = formatRp(grandTotal);
     $('statCount').textContent = bills.length;
     $('statDays').textContent = dates.length;
- 
+
     dates.forEach(date=>{
       const dayBills = grouped[date];
       const dayTotal = dayBills.reduce((s,b)=>s+b.totalSetelah,0);
       const d = new Date(date+'T00:00:00');
       const dayLabel = isNaN(d) ? date : `${DAYNAMES[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
- 
+
       const card = document.createElement('div');
       card.className = 'day-card';
       card.innerHTML = `
@@ -534,14 +574,14 @@
             <td>${it.name}</td>
             <td class="num">${it.qty}</td>
             <td class="num">${formatRp(it.harga)}</td>
-            <td class="num" style="color:var(--orange-dark);font-weight:700;">${formatRp(it.hargaDiskon)}</td>
+            <td class="num" style="color:var(--ink);font-weight:700;">${formatRp(it.hargaDiskon)}</td>
             <td class="num">${formatRp(it.subtotalDiskon)}</td>
           </tr>`).join('');
         block.innerHTML = `
           <div class="bill-block-head">
             <span>${b.note ? '🧾 '+b.note : '🧾 Struk #'+b.id}</span>
             <span>
-              <span class="badge" style="background:var(--teal);">${formatRp(b.totalSetelah)}</span>
+              <span class="badge" style="background:var(--blue);color:#fff;">${formatRp(b.totalSetelah)}</span>
               <button class="btn-outline btn-sm copy-mini" data-bill="${b.id}">📋</button>
               <button class="btn-outline btn-sm wa-mini" data-bill="${b.id}">🟢</button>
               <button class="btn-danger-outline btn-sm del-mini" data-bill="${b.id}">Hapus</button>
@@ -563,14 +603,14 @@
         });
         body.appendChild(block);
       });
- 
+
       card.querySelector('.day-head').addEventListener('click', ()=>{
         body.classList.toggle('open');
       });
       dashList.appendChild(card);
     });
   }
- 
+
   // ---------- EXPORT ----------
   function doExport(silent){
     if(bills.length===0){
@@ -604,21 +644,22 @@
   }
   function autoExport(){ doExport(true); }
   $('btnExport').addEventListener('click', ()=>doExport(false));
- 
+
   // ---------- GOOGLE SHEET INTEGRATION ----------
   function setStatus(msg, ok){
     const el = $('connectStatus');
     el.textContent = 'Status: ' + msg;
-    el.style.color = ok ? 'var(--teal)' : 'var(--brown-soft)';
+    el.style.color = ok ? 'var(--green)' : 'var(--ink)';
+    el.style.fontWeight = ok ? '700' : '500';
   }
- 
+
   $('btnConnect').addEventListener('click', ()=>{
     const url = $('scriptUrlInput').value.trim();
     if(!url){ showToast('Isi dulu URL Web App Apps Script-nya'); return; }
     SCRIPT_URL = url;
     loadFromSheet();
   });
- 
+
   function billsFromRows(rows){
     const billsMap = {};
     rows.forEach(r=>{
@@ -646,7 +687,7 @@
     });
     return Object.values(billsMap).filter(b=>b.date);
   }
- 
+
   function loadFromSheet(){
     if(!SCRIPT_URL){ setStatus('belum terhubung', false); return; }
     setStatus('memuat data...', false);
@@ -663,7 +704,7 @@
         showToast('Gagal memuat dari Google Sheet');
       });
   }
- 
+
   function saveBillToSheet(bill){
     if(!SCRIPT_URL){ showToast('Belum terhubung ke Google Sheet — hubungkan dulu di bagian atas'); return; }
     const items = bill.items.map(it=>({
@@ -687,7 +728,7 @@
       .then(()=> showToast('Struk tersimpan ke Google Sheet ✅'))
       .catch(()=> showToast('Gagal menyimpan ke Google Sheet, cek koneksi'));
   }
- 
+
   function deleteBillFromSheet(billId){
     if(!SCRIPT_URL) return;
     fetch(SCRIPT_URL, {
@@ -696,7 +737,7 @@
       body: JSON.stringify({action:'delete', billId})
     }).catch(()=> showToast('Gagal menghapus dari Google Sheet'));
   }
- 
+
   function normalizeDate(val){
     if(!val) return null;
     if(typeof val === 'number'){
@@ -709,7 +750,7 @@
     if(!isNaN(parsed)) return `${parsed.getFullYear()}-${String(parsed.getMonth()+1).padStart(2,'0')}-${String(parsed.getDate()).padStart(2,'0')}`;
     return null;
   }
- 
+
   // ---------- INIT ----------
   (function init(){
     const today = new Date();
